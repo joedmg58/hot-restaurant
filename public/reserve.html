@@ -1,1 +1,122 @@
-reserve.html
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hot Restaurant</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <!-- Jumbotron containing main header, "Make Reservation" button and Home button -->
+  <div class="container">
+    <div class="jumbotron">
+      <h1 class="text-center"><span class="glyphicon glyphicon-fire"></span> Hot Restaurant</h1>
+      <hr>
+      <h2 class="text-center">Current Reservations and Waiting List</h2>
+      <br>
+      <div class="text-center">
+        <a href="/tables"><button type="button" class="btn btn-lg btn-primary"><span class="glyphicon glyphicon-list-alt"></span> View Tables</button></a>
+        <a href="/"><button type="button" class="btn btn-lg btn-default"><span class="glyphicon glyphicon-home"></span></button></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container"> 
+
+    <!-- Row containing API table link and wait list -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <p class="panel-title"><strong><a href="/">API Table link</a> | <a href="/">API Wait List</a></strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row that contains the form to "Add a Reservation" -->
+    <div class="row">
+
+      <div class="col-lg-12">
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><strong>Add a Reservation</strong></h3>
+          </div>
+          <div class="panel-body">
+            <form method="POST" role="form">
+
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name">
+              </div>
+
+              <div class="form-group">
+                <label for="phone_number">Phone Number</label>
+                <input type="text" class="form-control" id="phone_number">
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email">
+              </div>
+
+              <div class="form-group">
+                <label for="unique_id">Unique ID</label>
+                <input type="text" class="form-control" id="unique_id">
+              </div>
+
+            </form>
+            <br>
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-md" id="add-btn"><span class="fa fa-fire"></span> Submit</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- When you click Submit button, you grab values from form and do an AJAX POST request -->
+  <script type="text/javascript">
+
+    $("#add-btn").on("click", function(event) {
+      event.preventDefault();
+
+      // Create newReservation object that grabs the values entered into the reservation form
+      var newReservation = {
+        name: $("#name").val().trim(),
+        phoneNumber: $("#phone_number").val().trim(),
+        email: $("#email").val().trim(),
+        uniqueID: $("#unique_id").val().trim()
+      };
+
+      console.log( newReservation );
+      // Post newReservation object values into the tables html
+
+      var currentURL = window.location.origin;
+
+      // $.post( currentURL + '/api/tables', newReservation, function( data ){} ); (other way to do it)
+      $.post( currentURL + '/api/tables', newReservation ).then(function( reserve ) { 
+          
+          console.log( 'Reservation => ', reserve );
+
+          if ( reserve ) {
+            alert( 'You have made a table reservation.' );
+          } else {
+            alert("Sorry, no table available. You are in the waiting list.");
+          }
+          
+        });
+    });
+
+  </script>
+
+</body>
+</html>
